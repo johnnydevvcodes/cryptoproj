@@ -42,8 +42,8 @@ TextTheme get textTheme {
     //Caption
     labelLarge: TextStyle(
         fontFamily: FontFamily.lato,
-        fontSize: 12,
+        fontSize: 18,
         fontWeight: FontWeight.w400,
-        color: Colors.black),
+        color: Colors.black.withOpacity(.8)),
   );
 }

@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Pogi Coin',
       theme: AppTheme.defaultTheme,
-      home: const CoinListScreen(title: 'Pogi Coin'),
+      home:  CoinListScreen(),
     );
   }
 }

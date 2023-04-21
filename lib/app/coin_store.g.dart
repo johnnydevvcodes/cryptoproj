@@ -24,6 +24,22 @@ mixin _$CoinStore on _CoinStore, Store {
     });
   }
 
+  late final _$coinTickersAtom =
+      Atom(name: '_CoinStore.coinTickers', context: context);
+
+  @override
+  List<CoinTicker> get coinTickers {
+    _$coinTickersAtom.reportRead();
+    return super.coinTickers;
+  }
+
+  @override
+  set coinTickers(List<CoinTicker> value) {
+    _$coinTickersAtom.reportWrite(value, super.coinTickers, () {
+      super.coinTickers = value;
+    });
+  }
+
   late final _$refreshCoinsAsyncAction =
       AsyncAction('_CoinStore.refreshCoins', context: context);
 
@@ -49,7 +65,8 @@ mixin _$CoinStore on _CoinStore, Store {
   @override
   String toString() {
     return '''
-coins: ${coins}
+coins: ${coins},
+coinTickers: ${coinTickers}
     ''';
   }
 }

@@ -1,28 +1,38 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cryptoproj/core/coin/coin_ticker_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_sparkline/chart_sparkline.dart';
 
-import '../core/coin/coin.dart';
-import 'coin_sparkline.dart';
+import '../core/coin/coin_ticker.dart';
+import 'coin_detail_screen.dart';
 
 class CoinCard extends StatefulWidget {
-  final Coin coin;
-  const CoinCard(this.coin) : super();
+  final CoinTicker coinTicker;
+  const CoinCard(this.coinTicker) : super();
 
   @override
   State<CoinCard> createState() => _CoinCardState();
 }
 
 class _CoinCardState extends State<CoinCard> {
-  var data = [0.0, 1.0, 1.5, 2.0, 0.0, 0.0, -0.5, -1.0, -0.5, 0.0, 0.0];
+  CoinTicker get _coinTicker => widget.coinTicker;
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return CupertinoButton(
       padding: EdgeInsets.zero,
       minSize: 0,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  CoinDetailScreen(coinTicker: widget.coinTicker)),
+        );
+      },
       child: SizedBox(
         height: 90,
         child: Card(
@@ -37,20 +47,17 @@ class _CoinCardState extends State<CoinCard> {
               SizedBox(
                   width: 68,
                   child: Image.network(
-                      fit: BoxFit.cover,
-                      "https://coinicons-api.vercel.app/api/icon/${widget.coin.symbol!.toLowerCase()}")),
+                      fit: BoxFit.cover, widget.coinTicker.getIcon)),
               SizedBox(width: 8),
               SizedBox(
                 width: 58,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 14),
-                    Text(widget.coin.name!, style: textTheme.bodyMedium),
+                    Text(widget.coinTicker.name!, style: textTheme.bodyMedium),
                     SizedBox(height: 4),
-                    AutoSizeText(widget.coin.symbol!,
+                    AutoSizeText(widget.coinTicker.symbol!,
                         minFontSize: 10,
                         maxLines: 1,
                         style: textTheme.bodyMedium),
@@ -60,12 +67,23 @@ class _CoinCardState extends State<CoinCard> {
               SizedBox(width: 8),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Price", style: textTheme.bodyLarge),
-                    SizedBox(height: 4),
-                    Text("hign or low", style: textTheme.bodyLarge),
+                    Text(
+                        "USD " +
+                            _coinTicker.getUsdQuote.price!.toStringAsFixed(2),
+                        style: textTheme.bodyLarge),
+                    SizedBox(height: 1),
+                    Text(
+                        (_coinTicker.isGain ? "+" : "-") +
+                            (_coinTicker.isGain
+                                    ? _coinTicker.getGain
+                                    : _coinTicker.getLoss)
+                                .toStringAsFixed(2),
+                        style: textTheme.bodyLarge!.copyWith(
+                          color: _coinTicker.isGain ? Colors.green : Colors.red,
+                        )),
                   ],
                 ),
               ),
@@ -73,19 +91,46 @@ class _CoinCardState extends State<CoinCard> {
               SizedBox(
                 width: 100,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // CryptoSparkline(coinId: widget.coin.id!),
                     SizedBox(
-                        height: 25, width: 50, child: Sparkline(data: data)),
-                    SizedBox(height: 4),
-                    Text("ARROW up or low", style: textTheme.bodyLarge),
-                    SizedBox(height: 4),
-                    Text("gain or loss", style: textTheme.bodyLarge),
+                        height: 16,
+                        child: Sparkline(
+                          data: _coinTicker.getChartData,
+                          lineColor:
+                              _coinTicker.isGain ? Colors.green : Colors.red,
+                        )),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_coinTicker.isGain ? "↑" : "↓",
+                            style: textTheme.bodyLarge!.copyWith(
+                              fontSize: 10,
+                              color: _coinTicker.isGain
+                                  ? Colors.green
+                                  : Colors.red,
+                            )),
+                        SizedBox(width: 4),
+                        Text(
+                            (_coinTicker.isGain ? "+" : "-") +
+                                (_coinTicker.isGain
+                                        ? _coinTicker.getGainPercent
+                                        : _coinTicker.getLossPercent)
+                                    .toStringAsFixed(2) +
+                                " %",
+                            style: textTheme.bodyLarge!.copyWith(
+                              color: _coinTicker.isGain
+                                  ? Colors.green
+                                  : Colors.red,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
               ),
+              SizedBox(width: 8),
             ],
           ),
         ),

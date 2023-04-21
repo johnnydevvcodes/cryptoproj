@@ -1,3 +1,4 @@
+import 'package:cryptoproj/core/coin/coin_ticker.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -12,7 +13,12 @@ abstract class CoinApi {
   @GET("/coins")
   Future<List<Coin>> getCoins();
 
+  @GET("/tickers")
+  Future<List<CoinTicker>> getCoinTickers();
+
   @GET("/coins/{id}")
   Future<Coin> getCoin(@Path() String id);
-}
 
+  @GET("/coins/{id}/ohlcv/today")
+  Future getOhlcv(@Path() String id);
+}

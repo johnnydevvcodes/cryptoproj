@@ -7,9 +7,7 @@ import 'coin_card.dart';
 import 'coin_store.dart';
 
 class CoinListScreen extends StatefulWidget {
-  const CoinListScreen({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const CoinListScreen({Key? key}) : super(key: key);
 
   @override
   State<CoinListScreen> createState() => _CoinListScreenState();
@@ -29,7 +27,7 @@ class _CoinListScreenState extends State<CoinListScreen> {
       ),
       body: Observer(
         builder: (BuildContext context) {
-          var coins = _coinStore.coins;
+          var coins = _coinStore.coinTickers;
           return Column(
             children: [
               SizedBox(height: 12),
@@ -43,7 +41,8 @@ class _CoinListScreenState extends State<CoinListScreen> {
                       DateFormat.yMd()
                           .add_jms()
                           .format(DateTime.now().toLocal())
-                          .toString(),
+                          .toString()
+                          .toLowerCase(),
                       style: textTheme.bodyLarge),
                   SizedBox(width: 12),
                 ],
