@@ -1,16 +1,9 @@
-# cryptoproj
+# CryptoProj
 
-A new Flutter project.
+CryptoProj is a Flutter app designed for monitoring the crypto market. It implements REST API integration and follows clean architecture practices for a scalable and maintainable codebase.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Real-time monitoring of cryptocurrency market data
+- REST API integration for up-to-date information
+- Clean architecture practices for maintainability
